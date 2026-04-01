@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>命理轩 · 生辰八字命盘分析</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-light" data-theme="light">
+
+  <!-- 顶部导航 -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <a href="#" class="logo" onclick="showPage('home')">
+        <span class="logo-icon">命</span>
+        <span class="logo-text">命理轩</span>
+        <span class="logo-sub">八字命盘分析</span>
+      </a>
+      <nav class="main-nav">
+        <a href="#" class="nav-link" onclick="showPage('home')">首页</a>
+        <a href="#" class="nav-link" onclick="showPage('bazi')">排盘分析</a>
+        <a href="#" class="nav-link" onclick="showPage('marriage')">合婚</a>
+        <a href="#" class="nav-link" onclick="showPage('naming')">起名</a>
+        <a href="#" class="nav-link" onclick="showPage('auspicious')">择吉</a>
+        <a href="#" class="nav-link" onclick="showPage('knowledge')">知识库</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+          <span class="theme-icon sun">☀</span>
+          <span class="theme-icon moon">☽</span>
+        </button>
+        <button class="btn btn-ghost" onclick="showModal('loginModal')">登录</button>
+        <button class="btn btn-primary" onclick="showModal('registerModal')">免费注册</button>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#" class="nav-link" onclick="showPage('home');closeMobileNav()">首页</a>
+      <a href="#" class="nav-link" onclick="showPage('bazi');closeMobileNav()">排盘分析</a>
+      <a href="#" class="nav-link" onclick="showPage('marriage');closeMobileNav()">合婚</a>
+      <a href="#" class="nav-link" onclick="showPage('naming');closeMobileNav()">起名</a>
+      <a href="#" class="nav-link" onclick="showPage('auspicious');closeMobileNav()">择吉</a>
+      <a href="#" class="nav-link" onclick="showPage('knowledge');closeMobileNav()">知识库</a>
+    </div>
+  </header>
+
+  <!-- 页面容器 -->
+  <main id="appMain">
+
+    <!-- ==================== 首页 ==================== -->
+    <section class="page page-home active" id="page-home">
+
+      <!-- Hero 区域 -->
+      <div class="hero-section">
+        <div class="hero-bg">
+          <canvas id="heroCanvas"></canvas>
+          <div class="hero-overlay"></div>
+          <div class="hero-pattern"></div>
+        </div>
+        <div class="hero-content container">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            专业命理分析平台
+          </div>
+          <h1 class="hero-title">
+            <span class="title-line">洞见命运</span>
+            <span class="title-line accent">把握人生</span>
+          </h1>
+          <p class="hero-desc">
+            基于传统命理学与现代数据分析，精准解读您的生辰八字<br>
+            五行格局、十神关系、大运流年，全面呈现您的人生蓝图
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="showPage('bazi')">
+              <span>立即排盘</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="btn btn-outline btn-lg" onclick="scrollToFeatures()">了解更多</button>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-num">128万+</span>
+              <span class="stat-label">累计分析</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-num">98.6%</span>
+              <span class="stat-label">用户满意度</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-num">20年+</span>
+              <span class="stat-label">算法积淀</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-scroll-hint">
+          <span>向下探索</span>
+          <div class="scroll-line"></div>
+        </div>
+      </div>
+
+      <!-- 快速排盘卡片 -->
+      <div class="quick-form-section container" id="featuresSection">
+        <div class="section-header">
+          <span class="section-tag">快速体验</span>
+          <h2 class="section-title">输入生辰，即刻排盘</h2>
+          <p class="section-desc">只需填写您的出生信息，系统将在数秒内生成完整的八字命盘分析</p>
+        </div>
+        <div class="quick-form-card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">您的姓名</label>
+              <input type="text" class="form-input" id="qName" placeholder="请输入姓名（选填）" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">性别</label>
+              <div class="gender-select">
+                <button class="gender-btn active" data-gender="male" onclick="selectGender(this,'male')">
+                  <span>♂</span> 男
+                </button>
+                <button class="gender-btn" data-gender="female" onclick="selectGender(this,'female')">
+                  <span>♀</span> 女
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生日期</label>
+              <input type="date" class="form-input" id="qDate" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生时辰</label>
+              <select class="form-select" id="qHour">
+                <option value="">请选择时辰</option>
+                <option value="23">子时 (23:00-01:00)</option>
+                <option value="1">丑时 (01:00-03:00)</option>
+                <option value="3">寅时 (03:00-05:00)</option>
+                <option value="5">卯时 (05:00-07:00)</option>
+                <option value="7">辰时 (07:00-09:00)</option>
+                <option value="9">巳时 (09:00-11:00)</option>
+                <option value="11">午时 (11:00-13:00)</option>
+                <option value="13">未时 (13:00-15:00)</option>
+                <option value="15">申时 (15:00-17:00)</option>
+                <option value="17">酉时 (17:00-19:00)</option>
+                <option value="19">戌时 (19:00-21:00)</option>
+                <option value="21">亥时 (21:00-23:00)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">历法</label>
+              <div class="calendar-select">
+                <button class="calendar-btn active" onclick="selectCalendar(this,'solar')">公历</button>
+                <button class="calendar-btn" onclick="selectCalendar(this,'lunar')">农历</button>
+              </div>
+            </div>
+            <div class="form-group form-group-btn">
+              <button class="btn btn-primary btn-xl w-full" onclick="quickAnalyze()">
+                <span class="btn-text">开始分析</span>
+                <span class="btn-loading hidden">
+                  <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="60" stroke-dashoffset="20"/></svg>
+                  分析中...
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 功能特色 -->
+      <div class="features-section container">
+        <div class="section-header">
+          <span class="section-tag">核心功能</span>
+          <h2 class="section-title">专业命理分析体系</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card" onclick="showPage('bazi')">
+            <div class="feature-icon">
+              <svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><rect x="26" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><rect x="4" y="26" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><rect x="26" y="26" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3 class="feature-title">八字排盘</h3>
+            <p class="feature-desc">精准计算年柱、月柱、日柱、时柱，生成完整八字命盘，支持公历农历双重换算</p>
+            <span class="feature-arrow">→</span>
+          </div>
+          <div class="feature-card" onclick="showPage('bazi')">
+            <div class="feature-icon">
+              <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/><path d="M24 6C24 6 18 15 18 24s6 18 6 18" stroke="currentColor" stroke-width="2"/><path d="M6 24h36" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="14" r="4" fill="currentColor" opacity=".5"/><circle cx="24" cy="34" r="4" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3 class="feature-title">五行分析</h3>
+            <p class="feature-desc">深度解析金木水火土五行旺衰，揭示命盘格局，推断先天禀赋与后天发展方向</p>
+            <span class="feature-arrow">→</span>
+          </div>
+          <div class="feature-card" onclick="showPage('bazi')">
+            <div class="feature-icon">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M24 4L28.5 16.5H42L31.5 24.5L35.5 37L24 29.5L12.5 37L16.5 24.5L6 16.5H19.5L24 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="feature-title">十神解析</h3>
+            <p class="feature-desc">全面提取正官、偏财、正印等十神关系，解读命盘中的个性特质、事业财运与感情走向</p>
+            <span class="feature-arrow">→</span>
+          </div>
+          <div class="feature-card" onclick="showPage('bazi')">
+            <div class="feature-icon">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M8 38L8 20M16 38V14M24 38V10M32 38V18M40 38V24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="feature-title">大运流年</h3>
+            <p class="feature-desc">系统推演一生大运走势，精确计算各阶段运势起伏，把握人生关键转折时机</p>
+            <span class="feature-arrow">→</span>
+          </div>
+          <div class="feature-card" onclick="showPage('marriage')">
+            <div class="feature-icon">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M24 42C24 42 8 30 8 18a8 8 0 0116 0v0a8 8 0 0116 0c0 12-16 24-16 24z" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3 class="feature-title">合婚匹配</h3>
+            <p class="feature-desc">综合双方八字五行，分析感情合局与冲克，科学评估缘分契合度与婚姻稳定性</p>
+            <span class="feature-arrow">→</span>
+          </div>
+          <div class="feature-card" onclick="showPage('auspicious')">
+            <div class="feature-icon">
+              <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="34" rx="3" stroke="currentColor" stroke-width="2"/><path d="M6 20h36" stroke="currentColor" stroke-width="2"/><path d="M16 6v8M32 6v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="32" r="3" fill="currentColor" opacity=".6"/></svg>
+            </div>
+            <h3 class="feature-title">择吉日</h3>
+            <p class="feature-desc">结合八字喜用神与黄历，为婚嫁、开业、入宅等重要事项推荐最佳吉日良辰</p>
+            <span class="feature-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 八字知识科普 -->
+      <div class="knowledge-preview container">
+        <div class="section-header">
+          <span class="section-tag">命理知识</span>
+          <h2 class="section-title">探索命理之道</h2>
+        </div>
+        <div class="knowledge-grid">
+          <div class="knowledge-card large" onclick="showPage('knowledge')">
+            <div class="knowledge-tag">基础入门</div>
+            <h3>什么是生辰八字？</h3>
+            <p>八字，即"四柱八字"，是中国传统命理学的核心体系。以出生年、月、日、时四个时间维度，各用一个天干一个地支来表示，共八个字，故称"八字"...</p>
+            <span class="read-more">阅读全文 →</span>
+          </div>
+          <div class="knowledge-card" onclick="showPage('knowledge')">
+            <div class="knowledge-tag">五行</div>
+            <h3>五行生克制化</h3>
+            <p>金木水火土五行相生相克，构成宇宙万物运行的基本规律...</p>
+            <span class="read-more">阅读全文 →</span>
+          </div>
+          <div class="knowledge-card" onclick="showPage('knowledge')">
+            <div class="knowledge-tag">十神</div>
+            <h3>十神与人生格局</h3>
+            <p>正官代表规则与荣誉，偏财象征意外之财，每一神灵都映射着命主的人生面向...</p>
+            <span class="read-more">阅读全文 →</span>
+          </div>
+          <div class="knowledge-card" onclick="showPage('knowledge')">
+            <div class="knowledge-tag">大运</div>
+            <h3>大运推算方法</h3>
+            <p>大运以十年为一个周期，顺逆起运各有规律，精准把握大运可洞见人生阶段性走势...</p>
+            <span class="read-more">阅读全文 →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户评价 -->
+      <div class="testimonials-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">用户评价</span>
+            <h2 class="section-title">他们的真实反馈</h2>
+          </div>
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p>"分析结果非常准确，大运走势预测与我的实际经历高度吻合。界面设计也很精美，完全不像传统算命网站那种俗气感。"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">李</div>
+                <div>
+                  <div class="author-name">李女士</div>
+                  <div class="author-info">北京 · 企业高管</div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p>"用过很多命理网站，这个的五行分析和十神解读是最详细的。对我在职业选择和感情方面提供了很有参考价值的洞见。"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">王</div>
+                <div>
+                  <div class="author-name">王先生</div>
+                  <div class="author-info">上海 · 创业者</div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="stars">★★★★☆</div>
+              <p>"合婚分析给了我和另一半很多启发，不是简单的'合不合'，而是详细分析了各方面的互补与需要注意的地方。非常专业。"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">张</div>
+                <div>
+                  <div class="author-name">张女士</div>
+                  <div class="author-info">成都 · 设计师</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Banner -->
+      <div class="cta-section container">
+        <div class="cta-card">
+          <div class="cta-pattern"></div>
+          <div class="cta-content">
+            <h2>开启您的命理之旅</h2>
+            <p>免费注册，即可保存命盘记录，随时查阅历史分析</p>
+            <div class="cta-actions">
+              <button class="btn btn-light btn-lg" onclick="showPage('bazi')">立即排盘</button>
+              <button class="btn btn-outline-light btn-lg" onclick="showModal('registerModal')">免费注册</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== 排盘分析页 ==================== -->
+    <section class="page page-bazi" id="page-bazi">
+      <div class="page-hero">
+        <div class="container">
+          <div class="page-breadcrumb">首页 / 八字排盘</div>
+          <h1 class="page-title">生辰八字排盘分析</h1>
+          <p class="page-subtitle">输入精确的出生信息，获取您的专属八字命盘</p>
+        </div>
+      </div>
+
+      <div class="container bazi-container">
+        <!-- 左侧：输入表单 -->
+        <div class="bazi-form-panel" id="baziFormPanel">
+          <div class="panel-card">
+            <div class="panel-title">
+              <span class="panel-icon">⊕</span>
+              填写出生信息
+            </div>
+            <form class="bazi-form" onsubmit="return false;">
+              <div class="form-group">
+                <label class="form-label">姓名 <span class="optional">（选填）</span></label>
+                <input type="text" class="form-input" id="baziName" placeholder="输入姓名" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">性别</label>
+                <div class="gender-select">
+                  <button type="button" class="gender-btn active" id="baziMaleBtn" onclick="selectBaziGender('male')">♂ 男命</button>
+                  <button type="button" class="gender-btn" id="baziFemaleBtn" onclick="selectBaziGender('female')">♀ 女命</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">历法选择</label>
+                <div class="calendar-tabs">
+                  <button type="button" class="cal-tab active" id="solarTab" onclick="switchCalendar('solar')">公历（阳历）</button>
+                  <button type="button" class="cal-tab" id="lunarTab" onclick="switchCalendar('lunar')">农历（阴历）</button>
+                </div>
+              </div>
+              <div class="form-group" id="solarDateGroup">
+                <label class="form-label">出生日期</label>
+                <input type="date" class="form-input" id="baziSolarDate" />
+              </div>
+              <div class="form-group hidden" id="lunarDateGroup">
+                <label class="form-label">农历年份</label>
+                <select class="form-select" id="baziLunarYear">
+                  <option value="">请选择年份</option>
+                </select>
+                <label class="form-label mt-8">农历月份</label>
+                <select class="form-select" id="baziLunarMonth">
+                  <option value="">请选择月份</option>
+                  <option value="1">正月</option><option value="2">二月</option>
+                  <option value="3">三月</option><option value="4">四月</option>
+                  <option value="5">五月</option><option value="6">六月</option>
+                  <option value="7">七月</option><option value="8">八月</option>
+                  <option value="9">九月</option><option value="10">十月</option>
+                  <option value="11">冬月</option><option value="12">腊月</option>
+                </select>
+                <label class="form-label mt-8">农历日期</label>
+                <select class="form-select" id="baziLunarDay">
+                  <option value="">请选择日期</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">出生时辰</label>
+                <div class="shichen-grid">
+                  <button type="button" class="shichen-btn" data-hour="23" onclick="selectShichen(this)">子时<span>23-1</span></button>
+                  <button type="button" class="shichen-btn" data-hour="1" onclick="selectShichen(this)">丑时<span>1-3</span></button>
+                  <button type="button" class="shichen-btn" data-hour="3" onclick="selectShichen(this)">寅时<span>3-5</span></button>
+                  <button type="button" class="shichen-btn" data-hour="5" onclick="selectShichen(this)">卯时<span>5-7</span></button>
+                  <button type="button" class="shichen-btn" data-hour="7" onclick="selectShichen(this)">辰时<span>7-9</span></button>
+                  <button type="button" class="shichen-btn" data-hour="9" onclick="selectShichen(this)">巳时<span>9-11</span></button>
+                  <button type="button" class="shichen-btn" data-hour="11" onclick="selectShichen(this)">午时<span>11-13</span></button>
+                  <button type="button" class="shichen-btn" data-hour="13" onclick="selectShichen(this)">未时<span>13-15</span></button>
+                  <button type="button" class="shichen-btn" data-hour="15" onclick="selectShichen(this)">申时<span>15-17</span></button>
+                  <button type="button" class="shichen-btn" data-hour="17" onclick="selectShichen(this)">酉时<span>17-19</span></button>
+                  <button type="button" class="shichen-btn" data-hour="19" onclick="selectShichen(this)">戌时<span>19-21</span></button>
+                  <button type="button" class="shichen-btn" data-hour="21" onclick="selectShichen(this)">亥时<span>21-23</span></button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">出生地 <span class="optional">（选填，用于精确时区校正）</span></label>
+                <input type="text" class="form-input" id="baziLocation" placeholder="如：北京、上海、广州" />
+              </div>
+              <button type="button" class="btn btn-primary btn-xl w-full mt-16" onclick="analyzeBazi()">
+                <span id="analyzeText">生成八字命盘</span>
+                <span id="analyzeLoading" class="hidden">
+                  <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="60" stroke-dashoffset="20"/></svg>
+                  正在推演...
+                </span>
+              </button>
+            </form>
+          </div>
+
+          <!-- 历史记录 -->
+          <div class="panel-card mt-16" id="historyPanel">
+            <div class="panel-title">
+              <span class="panel-icon">◷</span>
+              历史记录
+            </div>
+            <div class="history-list" id="historyList">
+              <div class="history-empty">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="1.5" opacity=".3"/><path d="M20 12v10l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span>暂无历史记录</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：分析结果 -->
+        <div class="bazi-result-panel" id="baziResultPanel">
+          <!-- 待分析状态 -->
+          <div class="result-placeholder" id="resultPlaceholder">
+            <div class="placeholder-inner">
+              <div class="placeholder-circle">
+                <div class="taiji-anim"></div>
+              </div>
+              <h3>等待排盘</h3>
+              <p>填写左侧出生信息<br>点击"生成八字命盘"开始分析</p>
+            </div>
+          </div>
+
+          <!-- 分析结果 -->
+          <div class="result-content hidden" id="resultContent">
+
+            <!-- 命主信息卡 -->
+            <div class="result-card profile-card">
+              <div class="profile-header">
+                <div class="profile-avatar" id="resAvatar">命</div>
+                <div class="profile-info">
+                  <div class="profile-name" id="resName">命主</div>
+                  <div class="profile-meta" id="resMeta">1990年正月初一 · 子时</div>
+                  <div class="profile-tags" id="resTags">
+                    <span class="tag">阳历</span>
+                    <span class="tag">男命</span>
+                  </div>
+                </div>
+                <div class="profile-actions">
+                  <button class="icon-btn" onclick="saveResult()" title="保存命盘">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="1.5"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </button>
+                  <button class="icon-btn" onclick="shareResult()" title="分享命盘">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke="currentColor" stroke-width="1.5"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 四柱八字 -->
+            <div class="result-card">
+              <div class="card-title">四柱八字</div>
+              <div class="sizhu-table">
+                <div class="sizhu-header">
+                  <span>年柱</span><span>月柱</span><span>日柱</span><span>时柱</span>
+                </div>
+                <div class="sizhu-tiangan" id="tiangan">
+                  <span class="tg-cell" id="tg0"></span>
+                  <span class="tg-cell" id="tg1"></span>
+                  <span class="tg-cell day-master" id="tg2"></span>
+                  <span class="tg-cell" id="tg3"></span>
+                </div>
+                <div class="sizhu-dizhi" id="dizhi">
+                  <span class="dz-cell" id="dz0"></span>
+                  <span class="dz-cell" id="dz1"></span>
+                  <span class="dz-cell" id="dz2"></span>
+                  <span class="dz-cell" id="dz3"></span>
+                </div>
+                <div class="sizhu-wuxing" id="wuxingRow">
+                  <span class="wx-badge" id="wx0"></span>
+                  <span class="wx-badge" id="wx1"></span>
+                  <span class="wx-badge" id="wx2"></span>
+                  <span class="wx-badge" id="wx3"></span>
+                </div>
+                <div class="sizhu-shishen" id="shishenRow">
+                  <span class="ss-cell" id="ss0">日主</span>
+                  <span class="ss-cell" id="ss1"></span>
+                  <span class="ss-cell" id="ss2">日主</span>
+                  <span class="ss-cell" id="ss3"></span>
+                </div>
+              </div>
+              <div class="nayin-row">
+                <span class="nayin-label">纳音：</span>
+                <span id="nayinText">金箔金 · 大溪水 · 壁上土 · 海中金</span>
+              </div>
+            </div>
+
+            <!-- 五行分析 -->
+            <div class="result-card">
+              <div class="card-title">五行分析</div>
+              <div class="wuxing-visual">
+                <div class="wuxing-pentagon" id="wuxingPentagon">
+                  <canvas id="wuxingCanvas" width="220" height="220"></canvas>
+                </div>
+                <div class="wuxing-stats" id="wuxingStats">
+                  <!-- 动态生成 -->
+                </div>
+              </div>
+              <div class="wuxing-analysis" id="wuxingAnalysis"></div>
+            </div>
+
+            <!-- 日主分析 -->
+            <div class="result-card">
+              <div class="card-title">日主强弱</div>
+              <div class="rizhupanel" id="rizhuPanel">
+                <div class="rizhu-header">
+                  <span class="rizhu-char" id="rizhuChar">甲</span>
+                  <div class="rizhu-info">
+                    <div class="rizhu-name" id="rizhuName">甲木日主</div>
+                    <div class="rizhu-strength" id="rizhuStrength"></div>
+                  </div>
+                </div>
+                <div class="strength-bar">
+                  <div class="strength-fill" id="strengthFill"></div>
+                  <div class="strength-labels">
+                    <span>极弱</span><span>弱</span><span>中和</span><span>强</span><span>极强</span>
+                  </div>
+                </div>
+                <div class="rizhu-desc" id="rizhuDesc"></div>
+              </div>
+            </div>
+
+            <!-- 十神分析 -->
+            <div class="result-card">
+              <div class="card-title">十神关系</div>
+              <div class="shishen-grid" id="shishenGrid">
+                <!-- 动态生成 -->
+              </div>
+            </div>
+
+            <!-- 喜用神 -->
+            <div class="result-card xiyong-card">
+              <div class="card-title">喜用神建议</div>
+              <div class="xiyong-panel" id="xiyongPanel">
+                <!-- 动态生成 -->
+              </div>
+            </div>
+
+            <!-- 大运流年 -->
+            <div class="result-card">
+              <div class="card-title">大运流年</div>
+              <div class="dayun-section">
+                <div class="dayun-start" id="dayunStart"></div>
+                <div class="dayun-table" id="dayunTable">
+                  <!-- 动态生成 -->
+                </div>
+              </div>
+            </div>
+
+            <!-- 综合运势 -->
+            <div class="result-card">
+              <div class="card-title">综合运势评估</div>
+              <div class="fortune-grid" id="fortuneGrid">
+                <!-- 动态生成 -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 合婚页 ==================== -->
+    <section class="page page-marriage" id="page-marriage">
+      <div class="page-hero">
+        <div class="container">
+          <div class="page-breadcrumb">首页 / 合婚匹配</div>
+          <h1 class="page-title">八字合婚分析</h1>
+          <p class="page-subtitle">综合双方四柱八字，从五行、干支、格局多维度科学评估缘分契合度</p>
+        </div>
+      </div>
+      <div class="container marriage-container">
+
+        <!-- 输入表单 -->
+        <div class="marriage-form-row">
+          <div class="marriage-person-card">
+            <div class="person-header male">
+              <span class="person-icon">♂</span>
+              <span>男方信息</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">姓名（选填）</label>
+              <input type="text" class="form-input" id="mName" placeholder="男方姓名" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生日期</label>
+              <input type="date" class="form-input" id="mDate" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生时辰</label>
+              <select class="form-select" id="mHour">
+                <option value="11">不知道时辰（默认午时）</option>
+                <option value="23">子时 (23-1点)</option>
+                <option value="1">丑时 (1-3点)</option>
+                <option value="3">寅时 (3-5点)</option>
+                <option value="5">卯时 (5-7点)</option>
+                <option value="7">辰时 (7-9点)</option>
+                <option value="9">巳时 (9-11点)</option>
+                <option value="11">午时 (11-13点)</option>
+                <option value="13">未时 (13-15点)</option>
+                <option value="15">申时 (15-17点)</option>
+                <option value="17">酉时 (17-19点)</option>
+                <option value="19">戌时 (19-21点)</option>
+                <option value="21">亥时 (21-23点)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="marriage-versus">
+            <div class="versus-icon">合</div>
+            <div class="versus-label">缘</div>
+          </div>
+
+          <div class="marriage-person-card">
+            <div class="person-header female">
+              <span class="person-icon">♀</span>
+              <span>女方信息</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">姓名（选填）</label>
+              <input type="text" class="form-input" id="fName" placeholder="女方姓名" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生日期</label>
+              <input type="date" class="form-input" id="fDate" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生时辰</label>
+              <select class="form-select" id="fHour">
+                <option value="11">不知道时辰（默认午时）</option>
+                <option value="23">子时 (23-1点)</option>
+                <option value="1">丑时 (1-3点)</option>
+                <option value="3">寅时 (3-5点)</option>
+                <option value="5">卯时 (5-7点)</option>
+                <option value="7">辰时 (7-9点)</option>
+                <option value="9">巳时 (9-11点)</option>
+                <option value="11">午时 (11-13点)</option>
+                <option value="13">未时 (13-15点)</option>
+                <option value="15">申时 (15-17点)</option>
+                <option value="17">酉时 (17-19点)</option>
+                <option value="19">戌时 (19-21点)</option>
+                <option value="21">亥时 (21-23点)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-xl" style="margin:24px auto;display:flex;gap:8px;" onclick="runMarriageAnalysis()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="currentColor" opacity=".3"/><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zM9 8h2v8H9V8zm4 0h2v8h-2V8z" stroke="currentColor" stroke-width="0" fill="currentColor"/><path d="M9 22V2M15 22V2" stroke="currentColor" stroke-width="1.5"/><path d="M5 12C5 8.13 8.13 5 12 5s7 3.13 7 7-3.13 7-7 7-7-3.13-7-7z" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          开始合婚分析
+        </button>
+
+        <!-- 结果区域 -->
+        <div class="marriage-result hidden" id="marriageResult">
+
+          <!-- 1. 综合评分 -->
+          <div class="result-card marriage-score-card">
+            <div class="card-title">合婚综合评分</div>
+            <div class="marriage-score-panel">
+              <div class="score-circle-wrap">
+                <canvas id="scoreCanvas" width="180" height="180"></canvas>
+                <div class="score-inner">
+                  <div class="score-num" id="marriageScore">—</div>
+                  <div class="score-label">综合匹配度</div>
+                </div>
+              </div>
+              <div class="score-right">
+                <div class="score-level-badge" id="scoreLevelBadge"></div>
+                <div class="score-summary" id="scoreSummary"></div>
+                <div class="score-dimensions" id="scoreDimensions"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 双方八字对比 -->
+          <div class="result-card">
+            <div class="card-title">双方四柱对照</div>
+            <div class="marriage-bazi-compare" id="marriageBaziCompare"></div>
+          </div>
+
+          <!-- 3. 生肖合婚 -->
+          <div class="result-card">
+            <div class="card-title">生肖合婚</div>
+            <div class="shengxiao-panel" id="shengxiaoPanel"></div>
+          </div>
+
+          <!-- 4. 五行互补 -->
+          <div class="result-card">
+            <div class="card-title">五行格局互补</div>
+            <div id="marriageWuxing"></div>
+          </div>
+
+          <!-- 5. 干支合冲分析 -->
+          <div class="result-card">
+            <div class="card-title">干支合冲详解</div>
+            <div id="ganzhiAnalysis"></div>
+          </div>
+
+          <!-- 6. 感情建议 -->
+          <div class="result-card marriage-advice-card">
+            <div class="card-title">婚姻关系建议</div>
+            <div id="marriageAdvice"></div>
+          </div>
+
+        </div><!-- /marriage-result -->
+      </div>
+    </section>
+
+    <!-- ==================== 起名页 ==================== -->
+    <section class="page page-naming" id="page-naming">
+      <div class="page-hero">
+        <div class="container">
+          <div class="page-breadcrumb">首页 / 起名建议</div>
+          <h1 class="page-title">八字五行起名</h1>
+          <p class="page-subtitle">结合生辰八字五行喜忌，为宝宝或自己提供专业姓名建议</p>
+        </div>
+      </div>
+      <div class="container">
+        <div class="naming-form panel-card" style="max-width:640px;margin:40px auto;">
+          <div class="panel-title">填写信息</div>
+          <div class="form-group">
+            <label class="form-label">姓氏</label>
+            <input type="text" class="form-input" id="namingSurname" placeholder="如：李、王、张" maxlength="2" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">性别</label>
+            <div class="gender-select">
+              <button type="button" class="gender-btn active" id="namingMaleBtn" onclick="selectNamingGender('male')">♂ 男</button>
+              <button type="button" class="gender-btn" id="namingFemaleBtn" onclick="selectNamingGender('female')">♀ 女</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">出生日期</label>
+            <input type="date" class="form-input" id="namingDate" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">出生时辰</label>
+            <select class="form-select" id="namingHour">
+              <option value="11">午时（不确定时辰）</option>
+              <option value="23">子时</option><option value="1">丑时</option>
+              <option value="3">寅时</option><option value="5">卯时</option>
+              <option value="7">辰时</option><option value="9">巳时</option>
+              <option value="11">午时</option><option value="13">未时</option>
+              <option value="15">申时</option><option value="17">酉时</option>
+              <option value="19">戌时</option><option value="21">亥时</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">起名偏好（可多选）</label>
+            <div class="pref-tags">
+              <button class="pref-tag active" onclick="togglePref(this)">文雅书香</button>
+              <button class="pref-tag" onclick="togglePref(this)">大气有力</button>
+              <button class="pref-tag" onclick="togglePref(this)">清新自然</button>
+              <button class="pref-tag" onclick="togglePref(this)">传统经典</button>
+              <button class="pref-tag" onclick="togglePref(this)">现代时尚</button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-xl w-full mt-16" onclick="generateNames()">生成名字建议</button>
+        </div>
+        <div class="naming-result hidden" id="namingResult">
+          <div class="result-card">
+            <div class="card-title">推荐名字</div>
+            <div class="names-grid" id="namesGrid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 择吉页 ==================== -->
+    <section class="page page-auspicious" id="page-auspicious">
+      <div class="page-hero">
+        <div class="container">
+          <div class="page-breadcrumb">首页 / 择吉日</div>
+          <h1 class="page-title">黄道择吉</h1>
+          <p class="page-subtitle">结合八字喜用神与黄历干支，为人生重要事项推荐最佳良辰吉日</p>
+        </div>
+      </div>
+      <div class="container">
+        <div class="auspicious-layout">
+          <!-- 参数面板 -->
+          <div class="auspicious-form panel-card">
+            <div class="panel-title">
+              <span class="panel-icon">☯</span>
+              择日参数
+            </div>
+            <div class="form-group">
+              <label class="form-label">您的出生日期</label>
+              <input type="date" class="form-input" id="ausDate" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">出生时辰</label>
+              <select class="form-select" id="ausHour">
+                <option value="11">午时（不确定）</option>
+                <option value="23">子时</option><option value="1">丑时</option>
+                <option value="3">寅时</option><option value="5">卯时</option>
+                <option value="7">辰时</option><option value="9">巳时</option>
+                <option value="11">午时</option><option value="13">未时</option>
+                <option value="15">申时</option><option value="17">酉时</option>
+                <option value="19">戌时</option><option value="21">亥时</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">事项类型</label>
+              <div class="event-types">
+                <button class="event-btn active" onclick="selectEvent(this)">婚嫁</button>
+                <button class="event-btn" onclick="selectEvent(this)">开业</button>
+                <button class="event-btn" onclick="selectEvent(this)">入宅</button>
+                <button class="event-btn" onclick="selectEvent(this)">出行</button>
+                <button class="event-btn" onclick="selectEvent(this)">签约</button>
+                <button class="event-btn" onclick="selectEvent(this)">开工</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">查询月份</label>
+              <input type="month" class="form-input" id="ausMonth" />
+            </div>
+            <button class="btn btn-primary w-full" onclick="runAuspiciousDays()">
+              <span>推算吉日</span>
+            </button>
+
+            <!-- 个人喜用神提示 -->
+            <div class="aus-xiyong-tip" id="ausXiyongTip" style="display:none"></div>
+
+            <!-- 事项说明 -->
+            <div class="aus-event-desc" id="ausEventDesc"></div>
+          </div>
+
+          <!-- 日历区 -->
+          <div class="auspicious-calendar-wrap">
+            <div class="auspicious-calendar" id="auspiciousCalendar">
+              <div class="aus-placeholder">
+                <div class="aus-placeholder-icon">☀</div>
+                <p>填写左侧参数<br>点击「推算吉日」生成月历</p>
+              </div>
+            </div>
+
+            <!-- 吉日详情弹出（点击日期后显示） -->
+            <div class="aus-day-detail hidden" id="ausDayDetail">
+              <div class="aus-detail-header">
+                <div class="aus-detail-date" id="ausDetailDate"></div>
+                <button class="aus-detail-close" onclick="closeAusDayDetail()">✕</button>
+              </div>
+              <div class="aus-detail-body" id="ausDetailBody"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 知识库页 ==================== -->
+    <section class="page page-knowledge" id="page-knowledge">
+      <div class="page-hero">
+        <div class="container">
+          <div class="page-breadcrumb">首页 / 命理知识库</div>
+          <h1 class="page-title">命理知识库</h1>
+          <p class="page-subtitle">系统了解八字命理学的基础理论、实践方法与格局精要</p>
+        </div>
+      </div>
+      <div class="container knowledge-container">
+
+        <!-- 侧边栏 -->
+        <div class="knowledge-sidebar">
+          <!-- 搜索框 -->
+          <div class="kb-search-wrap">
+            <input type="text" class="kb-search-input" id="kbSearchInput" placeholder="搜索知识..." oninput="searchKnowledge(this.value)" />
+            <svg class="kb-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+
+          <div class="sidebar-menu">
+            <div class="sidebar-title">基础理论</div>
+            <button class="sidebar-item active" onclick="showKnowledge(this,'intro')">● 八字入门</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'tiangan')">● 天干详解</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'dizhi')">● 地支详解</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'wuxing')">● 五行生克</button>
+            <div class="sidebar-title" style="margin-top:16px">命理进阶</div>
+            <button class="sidebar-item" onclick="showKnowledge(this,'shishen')">● 十神体系</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'dayun')">● 大运流年</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'xiyong')">● 喜用神理论</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'geju')">● 八字格局</button>
+            <div class="sidebar-title" style="margin-top:16px">应用实践</div>
+            <button class="sidebar-item" onclick="showKnowledge(this,'shengxiao')">● 十二生肖</button>
+            <button class="sidebar-item" onclick="showKnowledge(this,'nayin')">● 纳音五行</button>
+          </div>
+
+          <!-- 热门标签 -->
+          <div class="kb-tags-section">
+            <div class="sidebar-title">热门标签</div>
+            <div class="kb-tags">
+              <span class="kb-tag" onclick="showKnowledge(null,'intro')">八字基础</span>
+              <span class="kb-tag" onclick="showKnowledge(null,'wuxing')">五行</span>
+              <span class="kb-tag" onclick="showKnowledge(null,'shishen')">十神</span>
+              <span class="kb-tag" onclick="showKnowledge(null,'xiyong')">喜用神</span>
+              <span class="kb-tag" onclick="showKnowledge(null,'geju')">格局</span>
+              <span class="kb-tag" onclick="showKnowledge(null,'dayun')">大运</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 知识内容 -->
+        <div class="knowledge-content" id="knowledgeContent">
+          <!-- 动态填充 -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">命</span>
+            <span class="logo-text">命理轩</span>
+          </div>
+          <p>专业的生辰八字命盘分析平台，让传统命理智慧服务现代生活。</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>核心功能</h4>
+            <a href="#" onclick="showPage('bazi')">八字排盘</a>
+            <a href="#" onclick="showPage('marriage')">合婚分析</a>
+            <a href="#" onclick="showPage('naming')">起名建议</a>
+            <a href="#" onclick="showPage('auspicious')">择吉日</a>
+          </div>
+          <div class="footer-col">
+            <h4>了解更多</h4>
+            <a href="#" onclick="showPage('knowledge')">命理知识库</a>
+            <a href="#">关于我们</a>
+            <a href="#">使用条款</a>
+            <a href="#">隐私政策</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 命理轩 · 八字命盘分析平台</span>
+        <span>本平台内容仅供参考，不构成任何决策依据</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 登录弹窗 -->
+  <div class="modal-overlay" id="loginModal" onclick="closeModalOutside(event,'loginModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+      <div class="modal-header">
+        <div class="modal-logo">命</div>
+        <h2>欢迎回来</h2>
+        <p>登录您的命理轩账户</p>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" onclick="switchLoginTab(this,'phone')">手机号登录</button>
+        <button class="modal-tab" onclick="switchLoginTab(this,'password')">密码登录</button>
+      </div>
+      <form class="modal-form" onsubmit="return false;">
+        <div class="form-group" id="loginPhoneGroup">
+          <label class="form-label">手机号</label>
+          <div class="input-with-btn">
+            <input type="tel" class="form-input" placeholder="请输入手机号" />
+            <button type="button" class="btn-sms" onclick="sendSMS(this)">发送验证码</button>
+          </div>
+        </div>
+        <div class="form-group" id="loginSmsGroup">
+          <label class="form-label">验证码</label>
+          <input type="text" class="form-input" placeholder="6位验证码" maxlength="6" />
+        </div>
+        <div class="form-group hidden" id="loginPasswordGroup">
+          <label class="form-label">密码</label>
+          <input type="password" class="form-input" placeholder="请输入密码" />
+        </div>
+        <button type="button" class="btn btn-primary w-full btn-xl" onclick="doLogin()">登录</button>
+        <div class="login-divider"><span>其他登录方式</span></div>
+        <div class="social-login">
+          <button type="button" class="social-btn wechat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.69 12.42c-.59 0-1.08-.48-1.08-1.08 0-.59.48-1.08 1.08-1.08.59 0 1.08.48 1.08 1.08 0 .59-.49 1.08-1.08 1.08zm6.62 0c-.59 0-1.08-.48-1.08-1.08 0-.59.48-1.08 1.08-1.08.59 0 1.08.48 1.08 1.08 0 .59-.49 1.08-1.08 1.08zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            微信登录
+          </button>
+          <button type="button" class="social-btn alipay">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.88 13.43c-.84.27-1.48.44-2.03.44-1.06 0-2.1-.56-3.14-1.68l-1.32.62H8.5l2.02-.95c-.62-.84-1.2-1.84-1.73-2.99H7.5V9.5h2.07c-.12-.38-.23-.77-.32-1.16H7.5V6.92h1.5c-.15-.77-.24-1.57-.24-2.4h1.66c0 .84.1 1.64.27 2.4h3.1V8.34h-2.77c.1.39.21.78.33 1.16h2.44v1.37h-2.03c.45 1.09.99 1.97 1.61 2.65 1.34-.57 2.35-1.22 3.04-1.93l.88 1.28c-.71.64-1.65 1.24-2.81 1.74.45.29.87.43 1.28.43.3 0 .69-.1 1.19-.3l.63 1.69z"/></svg>
+            支付宝登录
+          </button>
+        </div>
+        <p class="modal-footer-text">没有账号？<a href="#" onclick="closeModal('loginModal');showModal('registerModal')">立即注册</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- 注册弹窗 -->
+  <div class="modal-overlay" id="registerModal" onclick="closeModalOutside(event,'registerModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+      <div class="modal-header">
+        <div class="modal-logo">命</div>
+        <h2>创建账户</h2>
+        <p>加入命理轩，保存您的命盘记录</p>
+      </div>
+      <form class="modal-form" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <div class="input-with-btn">
+            <input type="tel" class="form-input" id="regPhone" placeholder="请输入手机号" />
+            <button type="button" class="btn-sms" onclick="sendSMS(this)">发送验证码</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">验证码</label>
+          <input type="text" class="form-input" placeholder="6位验证码" maxlength="6" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">设置密码</label>
+          <input type="password" class="form-input" placeholder="8-20位字母数字组合" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">昵称（选填）</label>
+          <input type="text" class="form-input" placeholder="您的昵称" />
+        </div>
+        <button type="button" class="btn btn-primary w-full btn-xl" onclick="doRegister()">注册</button>
+        <p class="modal-footer-text">已有账号？<a href="#" onclick="closeModal('registerModal');showModal('loginModal')">立即登录</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="bazi-algorithm.js"></script>
+  <script src="app.js"></script>
+  <script src="app-extended.js"></script>
+</body>
+</html>
